@@ -1,22 +1,20 @@
 import type {Book } from "../models/Book";
-import {
-    getAllBooks as allBooks , getBookByTitle as bookByTitle
-    ,getBookById as bookById, addBook as addNewEvent } from "../repositories/BookRepository";
+import * as repo from "../repositories/BookRepository";
 
 
 export async function getBookByTitle(title:string): Promise<Book[]> {
-    return bookByTitle(title)
+    return repo.getBookByTitle(title)
 }
 
 export async function getAllBooks():Promise<Book[]> {
-    return allBooks()
+    return repo.getAllBooks()
 }
 
 export async function getBookById(id: number): Promise<Book | undefined> {
-    return bookById(id)
+    return repo.getBookById(id)
 }
 
 export async function addBook(newBook: Book): Promise<Book> {
-    return addNewEvent(newBook);
+    return repo.addBook(newBook);
 }
 
