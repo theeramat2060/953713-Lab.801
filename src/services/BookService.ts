@@ -1,5 +1,5 @@
 import type {Book } from "../models/Book";
-import * as repo from "../repositories/BookRepository";
+import * as repo from "../repositories/BookRepositoryDb";
 
 
 export async function getBookByTitle(title:string): Promise<Book[]> {
