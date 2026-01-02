@@ -21,10 +21,10 @@ export async function getBookById(id: number): Promise<Book | undefined> {
 }
 
 export async function addBook(newBook: Book): Promise<Book> {
-    const {  title, description, Author_name, groups } = newBook;
+    const {  title, description, author_name, groups } = newBook;
     const result = await db.query(
-        'INSERT INTO books (title, description, Author_name, groups) VALUES ($1, $2, $3, $4) RETURNING *',
-        [title, description, Author_name, groups]
+        'INSERT INTO books (title, description, author_name, groups) VALUES ($1, $2, $3, $4) RETURNING *',
+        [title, description, author_name, groups]
     );
     return result.rows[0] as Book;
 }
