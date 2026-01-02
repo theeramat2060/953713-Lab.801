@@ -75,22 +75,22 @@ const books: Book[] = [
         groups: "History"
     }
 ];
-export function getBookByTitle(title:string): Book[] {
+export function getBookByTitle(title:string): Promise<Book[]> {
     const filteredBook = books.filter((book) => book.title === title);
-    return filteredBook;
+    return Promise.resolve(filteredBook) ;
 }
 
-export function getAllBooks(): Book[] {
-    return books;
+export function getAllBooks():Promise<Book[]> {
+    return Promise.resolve(books)
 }
 
-export function getBookById(id: number): Book | undefined {
-    return  books.find((book) => book.id === id);
+export function getBookById(id: number): Promise<Book | undefined> {
+    return  Promise.resolve(books.find((book) => book.id === id));
 }
 
-export function addBook(newBook: Book): Book {
+export function addBook(newBook: Book): Promise<Book> {
     newBook.id = books.length + 1;
     books.push(newBook);
-    return newBook;
+    return Promise.resolve(newBook);
 }
 

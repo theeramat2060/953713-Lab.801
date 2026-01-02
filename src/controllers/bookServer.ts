@@ -13,28 +13,62 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/books', (req: Request, res: Response) => {
     if (req.query.title) {
         const title = req.query.title as string;
-        const filteredBook=getBookByTitle(title);
-        res.json(filteredBook);
+        getBookByTitle(title)
+            .then((filteredBook) => {
+            res.json(filteredBook);
+        });
     }else {
-        res.json(getAllBooks());
+        getAllBooks().then(books => res.json(books));
     }
 });
 
 app.get('/books/:id', (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-    const book = getBookById(id);
-    if (book) {
-        res.json(book);
-    } else {
-        res.status(404).send("Book not found");
-    }
+    getBookById(id)
+        .then((book) => {
+        if (book) {
+            res.json(book);
+        } else {
+            res.status(404).send("Book not found");
+        }
+    });
 });
 
 
 app.post("/books", (req: Request, res: Response) => {
     const newBook: Book = req.body;
     if (newBook.id !== undefined) {
-        const allBooks = getAllBooks();
+        getAllBooks().then((allBooks) => {
+            const index = allBooks.findIndex(b => b.id === newBook.id);
+            if (index !== -1) {
+                allBooks[index] = newBook;
+                return res.json({
+                    message: `Book updated (id: ${newBook.id})`,
+                    data: allBooks[index],
+                });
+            } else {
+                addBook(newBook).then((addedBook) => {
+                    return res.json({
+                        message: "Book added",
+                        data: addedBook,
+                    });
+                });
+            }
+        });
+        return;
+    }
+    addBook(newBook).then((addedBook) => {
+        return res.json({
+            message: "Book added",
+            data: addedBook,
+        });
+    });
+});
+
+app.post("/books-sync", async (req: Request, res: Response) => {
+    const newBook: Book = req.body;
+    if (newBook.id !== undefined) {
+        const allBooks = await getAllBooks();
         const index = allBooks.findIndex((b: Book) => b.id === newBook.id);
         if (index !== -1) {
             allBooks[index] = newBook;
