@@ -10,62 +10,28 @@ app.get('/', (req: Request, res: Response) => {
     res.json('Hello World!')
 })
 
-app.get('/books', (req: Request, res: Response) => {
+app.get('/books',async (req: Request, res: Response) => {
     if (req.query.title) {
         const title = req.query.title as string;
-        getBookByTitle(title)
-            .then((filteredBook) => {
+        const filteredBook = await getBookByTitle(title)
             res.json(filteredBook);
-        });
     }else {
-        getAllBooks().then(books => res.json(books));
+        res.json( await getAllBooks());
     }
 });
 
-app.get('/books/:id', (req: Request, res: Response) => {
+app.get('/books/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-    getBookById(id)
-        .then((book) => {
+    const book = await getBookById(id)
         if (book) {
             res.json(book);
         } else {
             res.status(404).send("Book not found");
         }
-    });
 });
 
 
-app.post("/books", (req: Request, res: Response) => {
-    const newBook: Book = req.body;
-    if (newBook.id !== undefined) {
-        getAllBooks().then((allBooks) => {
-            const index = allBooks.findIndex(b => b.id === newBook.id);
-            if (index !== -1) {
-                allBooks[index] = newBook;
-                return res.json({
-                    message: `Book updated (id: ${newBook.id})`,
-                    data: allBooks[index],
-                });
-            } else {
-                addBook(newBook).then((addedBook) => {
-                    return res.json({
-                        message: "Book added",
-                        data: addedBook,
-                    });
-                });
-            }
-        });
-        return;
-    }
-    addBook(newBook).then((addedBook) => {
-        return res.json({
-            message: "Book added",
-            data: addedBook,
-        });
-    });
-});
-
-app.post("/books-sync", async (req: Request, res: Response) => {
+app.post("/books", async (req: Request, res: Response) => {
     const newBook: Book = req.body;
     if (newBook.id !== undefined) {
         const allBooks = await getAllBooks();
@@ -78,7 +44,7 @@ app.post("/books-sync", async (req: Request, res: Response) => {
             });
         }
     }
-    addBook(newBook);
+    await addBook(newBook);
     return res.json({
         message: "Book added",
         data: newBook,
