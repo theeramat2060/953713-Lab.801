@@ -63,3 +63,5 @@ jest.cache/
 .pnp/
 .pnp.js
 .parcel-cache/
+
+/src/generated/prisma
