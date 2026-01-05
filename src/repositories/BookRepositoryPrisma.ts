@@ -1,31 +1,43 @@
-import {prisma} from '../lib/prisma';
-import type {bookModel as Book} from "../generated/prisma/models/book";
+import { PrismaClient } from "@prisma/client";
+import { Book } from "../models/Book";
 
-    export function getBookByTitle(title: string) {
-      return prisma.book.findMany({
-            where: { title },
-      });
-    }
+export class BookRepository {
+    constructor(private prisma: PrismaClient) {}
 
-    export function getAllBooks() {
-      return prisma.book.findMany();
-    }
-
-    export function getBookById(id: number) {
-      return prisma.book.findUnique({
-            where: { id },
-      });
-    }
-
-export function addBook(newBook: Book): Promise<Book> {
-    return prisma.book.create({
-            data: {
-                    title: newBook.title,
-                    description: newBook.description,
-                    author_name: newBook.author_name,
-                    groups: newBook.groups
-            }
+    async findAll() {
+        return this.prisma.book.findMany({
+            include: { author: true },
         });
+    }
+
+    async findByTitle(title: string) {
+        return this.prisma.book.findMany({
+            where: {
+                title: {
+                    contains: title,
+                    mode: "insensitive",
+                },
+            },
+            include: { author: true },
+        });
+    }
+
+    async findById(id: number) {
+        return this.prisma.book.findUnique({
+            where: { id },
+            include: { author: true },
+        });
+    }
+
+    // ✅ addBook function
+    async addBook(book: Book) {
+        return this.prisma.book.create({
+            data: {
+                title: book.title,
+                isbn: book.isbn,
+                category: book.category,
+                authorId: book.authorId,
+            },
+        });
+    }
 }
-
-

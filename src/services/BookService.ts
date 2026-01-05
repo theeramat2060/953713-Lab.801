@@ -1,17 +1,20 @@
-import type {bookModel as Book} from "../generated/prisma/models/book";
-import * as repo from "../repositories/BookRepositoryPrisma";
+import { prisma } from "../prisma";
+import { Book } from "../models/Book";
+import {BookRepository} from "../repositories/BookRepositoryPrisma";
+
+const repo = new BookRepository(prisma);
 
 
 export async function getBookByTitle(title:string) {
-    return repo.getBookByTitle(title);
+    return repo.findByTitle(title);
 }
 
 export async function getAllBooks() {
-    return repo.getAllBooks()
+    return repo.findAll()
 }
 
 export async function getBookById(id: number) {
-    return repo.getBookById(id)
+    return repo.findById(id)
 }
 
 export async function addBook(newBook: Book) {
