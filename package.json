@@ -2,33 +2,39 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.3",
+    "@types/pg": "^8.20.0",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "@prisma/client": "^7.6.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "pg": "^8.20.0",
+    "prisma": "^7.6.0"
   },
-  "name": "953713-lab.801",
+  "name": "Library-service@1.0.0",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/controllers/bookServer.js",
+    "start": "node dist/bookServer.js",
     "build": "tsc",
-    "dev": "ts-node src/controllers/bookServer.ts",
+    "dev": "ts-node src/bookServer.ts",
+    "dev:watch": "nodemon",
     "seed": "ts-node src/seed.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/theeramat2060/953713-Lab.801.git"
+    "url": "git+https://github.com/theeramat2060/Lab713-Library-book.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/theeramat2060/953713-Lab.801/issues"
+    "url": "https://github.com/theeramat2060/Lab713-Library-book/issues"
   },
-  "homepage": "https://github.com/theeramat2060/953713-Lab.801#readme"
+  "homepage": "https://github.com/theeramat2060/Lab713-Library-book#readme"
 }
